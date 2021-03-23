@@ -5,7 +5,12 @@
     </div>
 
     <div class="nav-opts">
-      <a href="sign-in.php">Sign-in</a>
+      <?php
+        if(isset($_SESSION["username"]))
+        {
+          echo "<a href=\"index\">Signed in as ".$_SESSION["username"]."</a>";
+        }
+      ?>
     </div>
   </div>
 </nav>

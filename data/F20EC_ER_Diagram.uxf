@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>11</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>649</x>
+      <y>198</y>
+      <w>220</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>*ACCOUNT*
+--
+* acc_id : INT
+acc_username : STRING
+acc_password : STRING
+acc_created : DATE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>297</x>
+      <y>451</y>
+      <w>220</w>
+      <h>209</h>
+    </coordinates>
+    <panel_attributes>*PRODUCT*
+--
+* prod_id : INT
+prod_name : STRING
+prod_desc : STRING
+prod_price : DOUBLE
+prod_stock : INT
+prod_created : DATE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>649</x>
+      <y>451</y>
+      <w>220</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>*BASKET*
+--
+^ acc_id : INT
+^ prod_id : INT
+bask_amount : INT
+bask_ship_status : STRING
+bask_consign_no : STRING
+^ ord_id : INT
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>649</x>
+      <y>616</y>
+      <w>220</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>This is a JOIN table with no PK. It combines ACCOUNT and PRODUCT data to denote which products are in which account's basket.
+
+When the order is placed an ord_det_id is assigned.
+halign=left
+style=wordwrap
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1001</x>
+      <y>451</y>
+      <w>220</w>
+      <h>209</h>
+    </coordinates>
+    <panel_attributes>*ORDER*
+--
+* ord_id : INT
+ord_del_name : STRING
+ord_del_addr_1 : STRING
+ord_del_addr_2 : STRING
+ord_del_postcode : STRING
+ord_del_city : STRING
+ord_del_county : STRING
+ord_auth_code : STRING</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>748</x>
+      <y>319</y>
+      <w>55</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1..1</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>858</x>
+      <y>528</y>
+      <w>165</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+n..1</panel_attributes>
+    <additional_attributes>10.0;20.0;130.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>506</x>
+      <y>528</y>
+      <w>165</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1..n</panel_attributes>
+    <additional_attributes>130.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>297</x>
+      <y>198</y>
+      <w>220</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>*PRODUCT_IMG*
+--
+* prod_img_id : INT
+^ prod_id : INT
+prod_img_link : STRING</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>396</x>
+      <y>319</y>
+      <w>55</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1..n</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+</diagram>
