@@ -12,7 +12,10 @@
     if(DBAPI::verify_password($conn, $user, $_POST["pass"]))
     {
       $r->success = true;
-      if($r->success == true) $_SESSION["username"] = $user;
+      if($r->success == true) {
+        $_SESSION["username"] = $user;
+        $_SESSION["user_id"]  = DBAPI::get_user_id($conn, $user)["acc_id"];
+      }
       echo json_encode($r);
     }
     else

@@ -8,6 +8,17 @@
       return new SQLite3("../../data/f20ec-store.db");
     }
 
+    static function sanitize_input($i)  {
+      /*
+        Sanitize input
+      */
+  
+      $i = strip_tags($i);        // Remove dangerous tags
+      $i = htmlspecialchars($i);  // Escape any remaining special characters
+  
+      return $i;
+    }
+
     static function get_product_images($conn, $id)
     {
       $q = $conn->prepare(" SELECT prod_img_link
@@ -48,6 +59,16 @@
         array_push($r_array, $row);
       }
       return $r_array;
+    }
+
+    static function get_user_id($conn, $user)
+    {
+      $q = $conn->prepare(" SELECT acc_id 
+                            FROM accounts
+                            WHERE acc_username = :user");
+      $q->bindValue(":user", $user);
+
+      return $q->execute()->fetchArray();
     }
 
     static function check_user_exists($conn, $user)
@@ -91,15 +112,78 @@
       return self::check_user_exists($conn, $user);
     }
 
-    static function sanitize_input($i)  {
-      /*
-        Sanitize input
-      */
-  
-      $i = strip_tags($i);        // Remove dangerous tags
-      $i = htmlspecialchars($i);  // Escape any remaining special characters
-  
-      return $i;
+    static function get_product_from_basket($conn, $prod_id, $user_id)
+    {
+      $q = $conn->prepare(" SELECT * FROM baskets
+                            WHERE acc_id=:user_id AND prod_id=:prod_id");
+      $q->bindValue("user_id", $user_id);
+      $q->bindValue("prod_id", $prod_id);
+
+      return $q->execute()->fetchArray();
+    }
+
+    static function add_to_basket($conn, $prod_id, $user_id) {
+      $existing = self::get_product_from_basket($conn, $prod_id, $user_id);
+      if($existing != null)
+      {
+        $quantity = $existing["bask_amount"];
+
+        $q = $conn->prepare(" UPDATE baskets
+                              SET bask_amount = :new_amount
+                              WHERE acc_id=:user_id AND prod_id=:prod_id");
+        $q->bindValue("user_id", $user_id);
+        $q->bindValue("prod_id", $prod_id);
+        $q->bindValue("new_amount", $quantity+1);
+        $result = $q->execute();
+      }
+      else
+      {
+        $q = $conn->prepare(" INSERT INTO baskets
+                                (acc_id, prod_id, bask_amount)
+                              VALUES
+                                (:user_id, :prod_id, 1)");
+        $q->bindValue("user_id", $user_id);
+        $q->bindValue("prod_id", $prod_id);
+        $result = $q->execute();
+      }
+    }
+
+    static function remove_from_basket($conn, $prod_id, $user_id) {
+      $existing = self::get_product_from_basket($conn, $prod_id, $user_id);
+      if($existing != null && $existing["bask_amount"] > 1)
+      {
+        $quantity = $existing["bask_amount"];
+
+        $q = $conn->prepare(" UPDATE baskets
+                              SET bask_amount = :new_amount
+                              WHERE acc_id=:user_id AND prod_id=:prod_id");
+        $q->bindValue("user_id", $user_id);
+        $q->bindValue("prod_id", $prod_id);
+        $q->bindValue("new_amount", $quantity-1);
+        $result = $q->execute();
+      }
+      else
+      {
+        $q = $conn->prepare(" DELETE FROM baskets
+                              WHERE acc_id=:user_id AND prod_id=:prod_id");
+        $q->bindValue("user_id", $user_id);
+        $q->bindValue("prod_id", $prod_id);
+        $result = $q->execute();
+      }
+    }
+
+    static function get_basket($conn, $user_id)  {
+      $q = $conn->prepare(" SELECT * FROM baskets
+                            WHERE acc_id = :user_id");
+      $q->bindValue(":user_id", $user_id);
+      $result = $q->execute();
+
+      $r_array = array();
+      while($row = $result->fetchArray())
+      {
+        array_push($r_array, $row);
+      }
+      return $r_array;
     }
 
   }

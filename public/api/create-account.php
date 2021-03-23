@@ -17,7 +17,10 @@
     else
     {
       $r->success = DBAPI::create_account($conn, $user, $_POST["pass"]);
-      if($r->success == true) $_SESSION["username"] = $user;
+      if($r->success == true) {
+        $_SESSION["username"] = $user;
+        $_SESSION["user_id"]  = DBAPI::get_user_id($conn, $user)["acc_id"];
+      }
       echo json_encode($r);
     }
 

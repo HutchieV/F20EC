@@ -2,10 +2,9 @@
 
   class EAPI
   {
-    static function create_error_json($message, $details="")
+    static function create_error_json($message)
     {
-      $e->error   = $message;
-      $e->details = $details;
+      $e->error = $message;
       return json_encode($e);
     }
   }
